@@ -1,0 +1,29 @@
+---
+image: golang:1.5
+
+stages:
+- test
+- build
+
+before_script:
+- GODIR=$GOPATH/src/gitlab.com/tmaczukin/goligen
+- mkdir -p "$(dirname $GODIR)"
+- ln -sfv "$(pwd -P)" "$GODIR"
+- cd "$GODIR"
+- apt-get update >/dev/null
+- apt-get install -y locales >/dev/null
+- echo "en_US UTF-8" > /etc/locale.gen
+- locale-gen en_US.UTF-8
+- export LANG=en_US.UTF-8
+- export LANGUAGE=en_US:en
+- export LC_ALL=en_US.UTF-8
+
+tests:
+  stage: test
+  script:
+  - make test
+
+build:
+  stage: build
+  script:
+  - make build_all
