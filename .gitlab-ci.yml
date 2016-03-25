@@ -27,3 +27,6 @@ build:
   stage: build
   script:
   - make build_all
+  artifacts:
+    paths:
+    - ./out/binaries/*
