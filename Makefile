@@ -4,9 +4,9 @@ VERSION := $(shell (git describe || echo dev) | sed -e 's/^v//g')
 
 BUILD_PLATFORMS ?= -os=linux -arch=amd64
 GO_LDFLAGS ?= -X main.NAME=$(NAME) -X main.VERSION=$(VERSION) -X main.REVISION=$(REVISION)
-GO_FILES ?= $(shell find . -type f -name '*.go')
+export GO15VENDOREXPERIMENT := 1
 
-all: deps test build_all
+all: test build_all
 
 deps:
 	# Install dependencies
@@ -16,7 +16,7 @@ deps:
 	go get golang.org/x/tools/cmd/vet
 	go get github.com/fzipp/gocyclo
 
-test: deps lint fmt vet complexity
+test: bindata lint fmt vet complexity
 
 lint:
 	# Running LINT test
@@ -34,20 +34,20 @@ complexity:
 	# Check code complexity
 	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go")
 
-bin-data: $(GO_FILES)
+bindata: deps
 	# Bundle binaries
 	@go-bindata                   \
 		-pkg license          \
 		-o license/bindata.go \
 		templates/
 
-build_all: bin-data
+build_all: bindata
 	# Building $(NAME) in version $(VERSION) for $(BUILD_PLATFORMS)
 	@gox $(BUILD_PLATFORMS)          \
 		-ldflags "$(GO_LDFLAGS)" \
 		-output="out/binaries/$(NAME)-{{.OS}}-{{.Arch}}"
 
-build: bin-data
+build: bindata
 	# Building $(NAME) in version $(VERSION) for current platform
 	@go build                        \
 		-ldflags "$(GO_LDFLAGS)" \
