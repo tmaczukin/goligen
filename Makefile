@@ -13,26 +13,28 @@ deps:
 	go get github.com/mitchellh/gox
 	go get -u github.com/jteeuwen/go-bindata/...
 	go get -u github.com/golang/lint/golint
-	go get golang.org/x/tools/cmd/vet
 	go get github.com/fzipp/gocyclo
+	go install cmd/vet
 
-test: bindata lint fmt vet complexity
+test: deps lint fmt vet complexity
 
 lint:
 	# Running LINT test
-	@golint ./... | ( ! grep -v -e "be unexported" )
+	@for package in $$(go list ./... | grep -v /vendor/); do \
+		golint $$package | (! grep -v "should have comment or be unexported"); \
+	done
 
 fmt:
 	# Check code formatting style
-	@go fmt ./... | awk '{ print "Please run go fmt"; exit 1 }'
+	@go fmt $$(go list ./... | grep -v -e /vendor/ -e license/bindata\.go) | awk '{ print "Please run go fmt ("$$0")"; exit 1 }'
 
 vet:
 	# Checking for suspicious constructs
-	@go vet ./...
+	@go vet $$(go list ./... | grep -v /vendor/)
 
 complexity:
 	# Check code complexity
-	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go")
+	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go" ! -path "./vendor/*")
 
 bindata: deps
 	# Bundle binaries
