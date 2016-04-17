@@ -1,0 +1,6 @@
+v0.1.0 (unreleased)
+
+- User templates handling
+- Internal MIT template
+- Internal GPL-2.0 template
+- Basic implementation (templates listing and license file generation)
