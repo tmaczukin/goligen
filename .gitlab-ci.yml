@@ -9,28 +9,29 @@ before_script:
 - GODIR=$GOPATH/src/gitlab.com/tmaczukin/goligen
 - mkdir -p "$(dirname $GODIR)"
 - ln -sfv "$(pwd -P)" "$GODIR"
+- cd /tmp
+- wget -q https://github.com/Masterminds/glide/releases/download/0.10.2/glide-0.10.2-linux-amd64.tar.gz -O glide.tar.gz
+- tar -xzf glide.tar.gz
+- mv linux-amd64/glide /usr/local/bin/glide
 - cd "$GODIR"
-- apt-get update >/dev/null
-- apt-get install -y locales >/dev/null
-- echo "en_US UTF-8" > /etc/locale.gen
-- locale-gen en_US.UTF-8
-- export LANG=en_US.UTF-8
-- export LANGUAGE=en_US:en
-- export LC_ALL=en_US.UTF-8
 
 tests:
   stage: test
   script:
   - make test
+  - go build
   tags:
   - docker
 
 build:
   stage: build
   script:
+  - glide install
   - make build_all
   artifacts:
     paths:
     - ./out/binaries/*
+  only:
+  - tags
   tags:
   - docker

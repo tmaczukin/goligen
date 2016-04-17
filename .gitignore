@@ -1,2 +1,4 @@
 /license/bindata.go
 /out/
+/vendor/*
+!vendor/.gitkeep
