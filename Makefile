@@ -2,7 +2,7 @@ NAME ?= goligen
 REVISION := $(shell git rev-parse --short HEAD || echo unknown)
 VERSION := $(shell (git describe || echo dev) | sed -e 's/^v//g')
 
-BUILD_PLATFORMS ?= -os=linux -arch=amd64
+BUILD_PLATFORMS ?= -os=linux -os=darwin -os=freebsd -os=windows -arch=amd64 -arch=386
 GO_LDFLAGS ?= -X main.NAME=$(NAME) -X main.VERSION=$(VERSION) -X main.REVISION=$(REVISION)
 export GO15VENDOREXPERIMENT := 1
 
@@ -15,6 +15,7 @@ deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/fzipp/gocyclo
 	go install cmd/vet
+	glide install
 
 test: deps lint fmt vet complexity
 

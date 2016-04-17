@@ -25,12 +25,6 @@ tests:
 build:
   stage: build
   script:
-  - glide install
   - make build_all
-  artifacts:
-    paths:
-    - ./out/binaries/*
-  only:
-  - tags
   tags:
   - docker
