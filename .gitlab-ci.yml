@@ -19,7 +19,6 @@ tests:
   stage: test
   script:
   - make test
-  - go build
   tags:
   - docker
 
