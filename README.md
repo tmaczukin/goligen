@@ -21,7 +21,7 @@ Simple license file generator written in GO
 
 ## Installation
 
-Currently there is no source of compilet binaries. You can install the tool from source
+Currently there is no source of compiled binaries. You can install the tool from source
 with:
 
 ```bash
@@ -40,7 +40,7 @@ GoLiGen is a quite simple command line tool. It has two main commands:
 - `list` - to [list the available license templates](#list-available-license-templates)
 - `generate` - to [generate the license itself](#generate-the-license)
 
-The global options description you can find by using the `help` command:
+The global options' description you can find by using the `help` command:
 
 ```bash
 $ out/binaries/goligen help
@@ -59,8 +59,8 @@ GLOBAL OPTIONS:
 goligen list
 ```
 
-To list available license templates you need to use the `list` command. It will output the list of template's IDs on the
-standard output:
+To list an available license templates you need to use the `list` command. It will output the list of template's IDs on
+the standard output:
 
 ```bash
 $ ./goligen list
@@ -69,7 +69,7 @@ INFO[0000]   GPL-2.0
 INFO[0000]   MIT
 ```
 
-If you are using [user templates](#own-license-templates) the you will see also all available templates from the user's
+If you are using [user templates](#own-license-templates) then you will see also all available templates from the user's
 configuration directory:
 
 ```bash
@@ -90,7 +90,7 @@ goligen generate [command options] [ID]
 To generate the license you need to use the `generate` command. It will generate the license text and return it on the
 standard output.
 
-`generate` command requires you to provide the `ID` argument and at least one `date`/`name` pair for the copyright:
+`generate` command requires the `ID` argument and at least one `date`/`name` pair for the copyright:
 
 ```bash
 $ goligen generate -d 2016 -n "Example Inc." MIT
@@ -103,7 +103,7 @@ Copyright (c) 2016 Example Inc.
 ```
 
 If you will not provide the `ID` and the `copyrights` values, then GoLiGen will return an error. Also remember, that
-providing `copyright` data you need to add a `date`/`name` pair. If you ommit one `date` or one `name` then an error
+providing `copyright` data you need to add a `date`/`name` pair. If you omit one `date` or one `name` then an error
 will be raised.
 
 ```bash
@@ -119,8 +119,8 @@ FATA[0000] Copyright-date and copyright-name must be added in pairs
 
 If you are using those values often, then consider creating the [configuration file](#default-configuration).
 
-If you want to save the license into file (instead of standard output) than you can use `-o` option. However remebmer
-that GoLiGen will refuse to reqrite the existing file. To force this you should use `-f` flag.
+If you want to save the license into file (instead of standard output) than you can use `-o` option. However remember
+that GoLiGen will refuse to rewrite the existing file. To force this you should use `-f` flag.
 
 Options `-d` (for `date`) and `-n` (for `name`) you can use multiple times but always in pairs.
 
@@ -146,8 +146,8 @@ OPTIONS:
 
 ## Default configuration
 
-If you are creating new projects often, and you use similar data each time, then you may want to not repeat yourself
-in command line. Instead you can create a configuration file with default values for the generator.
+If you are creating new projects often, and you are using similar data each time, then you may want to not repeat
+yourself in command line. Instead, you can create a configuration file with default values for the generator.
 
 File needs to be located in your home directory: `~/.goligen/config.toml`. In the configuration file you can set
 a default license `ID` and as more default `copyrights` as you want.
@@ -166,15 +166,15 @@ default_license_id = "MIT"
 
 If you want to use some Free/OpenSource license that is not included in GoLiGen, then it is highly recommended to create
 a Merge Request with a new license template. I would like this software to be usable for the whole FOSS community. But
-there is plenty of FOSS-like licenses. I will be adding templates in my free time, but this process may take some time.
+there is a plenty of FOSS-like licenses. I will be adding templates in my free time, but this process may take some time.
 So help is welcome.
 
 If you want to use a license template that is not present in internal templates list (for example some not added FOSS
-license, but also your own properiaty license) you may add your own _user template_.
+license, but also your own proprietary license) you may add your own _user license template_.
 
 For this you need to create a templates directory in the configuration directory: `~/.goligen/templates/`. Inside of the
-directory you can add license template files. Each file must have a name same as the license `ID` that you would like
-to use. The name must match the regular expression: `[A-Za-z0-9\\-\\.+]+$`.
+directory you can add the license template files. Each file must have a name same as the license `ID` that you would
+like to use. The name must match the regular expression: `[A-Za-z0-9\\-\\.+]+$`.
 
 After adding your own license template you will see it on the list:
 
@@ -191,4 +191,4 @@ You can use the template by adding the `-u` flag to the `generate` command.
 
 ## License
 
-This is free sofware licensed under MIT license. See LICENSE file.
+This is a free software licensed under MIT license. See LICENSE file.
