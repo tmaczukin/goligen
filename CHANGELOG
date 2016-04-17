@@ -1,5 +1,6 @@
 v0.1.0 (unreleased)
 
+- Main documentation
 - User default configuration (default license ID and defaults copyrights)
 - User templates handling
 - Internal MIT template
