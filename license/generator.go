@@ -38,7 +38,7 @@ func (g *Generator) prepareTemplate() error {
 	var err error
 	var templateText string
 
-	templateText, err = loadTemplate(g.license.ID)
+	templateText, err = loadTemplate(g.license.ID, g.license.UseUserTemplate)
 	if err != nil {
 		return err
 	}

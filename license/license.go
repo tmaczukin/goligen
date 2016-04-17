@@ -13,16 +13,18 @@ func NewCopyright(date string, name string) *Copyright {
 }
 
 type License struct {
-	ID         string
-	Copyrights []*Copyright
+	ID              string
+	UseUserTemplate bool
+	Copyrights      []*Copyright
 }
 
 func (l *License) AddCopyright(c *Copyright) {
 	l.Copyrights = append(l.Copyrights, c)
 }
 
-func NewLicense(id string) *License {
+func NewLicense(id string, useUserTemplate bool) *License {
 	return &License{
-		ID: id,
+		ID:              id,
+		UseUserTemplate: useUserTemplate,
 	}
 }

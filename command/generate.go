@@ -10,9 +10,10 @@ import (
 )
 
 type GenerateCommand struct {
-	ID          string
-	Output      string `long:"output" short:"o" ENV:"OUTPUT" description:"Output file"`
-	ForceOutput bool   `long:"force-output" short:"f" ENV:"FORCE_OUTPUT" description:"Rewrite file if exists"`
+	ID              string
+	Output          string `long:"output" short:"o" ENV:"OUTPUT" description:"Output file"`
+	ForceOutput     bool   `long:"force-output" short:"f" ENV:"FORCE_OUTPUT" description:"Rewrite file if exists"`
+	UseUserTemplate bool   `long:"use-user-template" short:"u" ENV:"USE_USER_TEMPLATE" description:"Use user template instead of internal"`
 
 	dates []string
 	names []string
@@ -77,7 +78,7 @@ func (c *GenerateCommand) prepareGenerator() *license.Generator {
 }
 
 func (c *GenerateCommand) prepareLicense() *license.License {
-	lic := license.NewLicense(c.ID)
+	lic := license.NewLicense(c.ID, c.UseUserTemplate)
 
 	counter := 0
 	max := len(c.dates)
