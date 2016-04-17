@@ -82,7 +82,7 @@ func (c *GenerateCommand) loadDatesAndNames(context *cli.Context) error {
 		return errors.New("There must be at least one copyright-date/copyright-name pair")
 	}
 
-	prepareCOpyrights(dates, names)
+	c.prepareCopyrights(dates, names)
 
 	return nil
 }
