@@ -20,7 +20,7 @@ type GenerateCommand struct {
 }
 
 func (c *GenerateCommand) ArgsUsage() string {
-	return "[license ID]"
+	return "[ID]"
 }
 
 func (c *GenerateCommand) Execute(context *cli.Context) {
