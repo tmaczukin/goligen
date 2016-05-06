@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"path"
 
@@ -9,12 +8,14 @@ import (
 	"github.com/codegangsta/cli"
 
 	"gitlab.com/tmaczukin/goligen/command"
+	"gitlab.com/tmaczukin/goligen/common"
 	"gitlab.com/tmaczukin/goligen/helpers"
 )
 
 var NAME = path.Base(os.Args[0])
 var VERSION = "dev"
 var REVISION = "HEAD"
+var BUILT = "now"
 
 func main() {
 	defer func() {
@@ -28,10 +29,16 @@ func main() {
 		}
 	}()
 
+	version := common.GetVersion()
+	err := version.SetValues(VERSION, REVISION, BUILT)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
 	app := cli.NewApp()
 	app.Name = NAME
 	app.Usage = "Simple license file generator"
-	app.Version = fmt.Sprintf("%s (%s)", VERSION, REVISION)
+	app.Version = version.ShortInfo()
 	app.Authors = []cli.Author{
 		cli.Author{
 			Name:  "Tomasz Maczukin",
@@ -46,7 +53,7 @@ func main() {
 
 	helpers.AddLogLevelFlags(app)
 
-	err := app.Run(os.Args)
+	err = app.Run(os.Args)
 	if err != nil {
 		logrus.Fatal(err)
 	}

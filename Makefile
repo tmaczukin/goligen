@@ -1,12 +1,13 @@
 NAME ?= goligen
 REVISION := $(shell git rev-parse --short HEAD || echo unknown)
 VERSION := $(shell (git describe || echo dev) | sed -e 's/^v//g')
+BUILT := $(shell date +%Y-%m-%dT%H:%M:%S%:z)
 
 BUILD_PLATFORMS ?= -os=linux -os=darwin -os=freebsd -os=windows -arch=amd64 -arch=386
-GO_LDFLAGS ?= -X main.NAME=$(NAME) -X main.VERSION=$(VERSION) -X main.REVISION=$(REVISION)
+GO_LDFLAGS ?= -X main.NAME=$(NAME) -X main.VERSION=$(VERSION) -X main.REVISION=$(REVISION) -X main.BUILT=$(BUILT)
 export GO15VENDOREXPERIMENT := 1
 
-all: test build_all
+all: deps test build_all
 
 deps:
 	# Install dependencies
@@ -37,20 +38,20 @@ complexity:
 	# Check code complexity
 	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go" ! -path "./vendor/*")
 
-bindata: deps
+license/bindata.go:
 	# Bundle binaries
 	@go-bindata                   \
 		-pkg license          \
 		-o license/bindata.go \
 		templates/
 
-build_all: bindata
+build_all: license/bindata.go
 	# Building $(NAME) in version $(VERSION) for $(BUILD_PLATFORMS)
 	@gox $(BUILD_PLATFORMS)          \
 		-ldflags "$(GO_LDFLAGS)" \
 		-output="out/binaries/$(NAME)-{{.OS}}-{{.Arch}}"
 
-build: bindata
+build: license/bindata.go
 	# Building $(NAME) in version $(VERSION) for current platform
 	@go build                        \
 		-ldflags "$(GO_LDFLAGS)" \
