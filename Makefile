@@ -38,7 +38,7 @@ complexity:
 	# Check code complexity
 	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go" ! -path "./vendor/*")
 
-license/bindata.go:
+license/bindata.go: deps
 	# Bundle binaries
 	@go-bindata                   \
 		-pkg license          \
