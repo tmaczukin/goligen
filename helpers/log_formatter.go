@@ -8,14 +8,14 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-const (
-	COLOR_CYAN    = "\033[1;36m"
-	COLOR_WHITE   = "\033[1;37m"
-	COLOR_YELLOW  = "\033[0;33m"
-	COLOR_BLUE    = "\033[1;34m"
-	COLOR_MAGENTA = "\033[1;35m"
-	COLOR_RED     = "\033[1;31m"
-	COLOR_ESCAPE  = "\033[0m"
+var (
+	COLORCYAN    = "\033[1;36m"
+	COLORWHITE   = "\033[1;37m"
+	COLORYELLOW  = "\033[0;33m"
+	COLORBLUE    = "\033[1;34m"
+	COLORMAGENTA = "\033[1;35m"
+	COLORRED     = "\033[1;31m"
+	COLORESCAPE  = "\033[0m"
 )
 
 type GoligenFormatter struct {
@@ -24,39 +24,47 @@ type GoligenFormatter struct {
 }
 
 func (gf *GoligenFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	var lvlColor, lvlText string
-
-	switch entry.Level {
-	case logrus.DebugLevel:
-		lvlColor = COLOR_CYAN
-		lvlText = "debug"
-	case logrus.InfoLevel:
-		lvlColor = COLOR_WHITE
-		lvlText = "info"
-	case logrus.WarnLevel:
-		lvlColor = COLOR_YELLOW
-		lvlText = "warning"
-	case logrus.ErrorLevel:
-		lvlColor = COLOR_BLUE
-		lvlText = "error"
-	case logrus.FatalLevel:
-		lvlColor = COLOR_MAGENTA
-		lvlText = "fatal"
-	case logrus.PanicLevel:
-		lvlColor = COLOR_RED
-		lvlText = "panic"
-	default:
-	}
+	lvlColor, lvlText := getLvlColorAndText(entry.Level)
 
 	b := bytes.Buffer{}
 	if gf.noColor == true && gf.forceColor != true {
 		fmt.Fprintf(&b, "%s: %s", lvlText, entry.Message)
 	} else {
-		fmt.Fprintf(&b, "%s%s: %s%s", lvlColor, lvlText, entry.Message, COLOR_ESCAPE)
+		fmt.Fprintf(&b, "%s%s: %s%s", lvlColor, lvlText, entry.Message, COLORESCAPE)
 	}
 	b.WriteByte('\n')
 
 	return b.Bytes(), nil
+}
+
+func getLvlColorAndText(level logrus.Level) (lvlColor, lvlText string) {
+	text := map[logrus.Level]string{
+		logrus.DebugLevel: "debug",
+		logrus.InfoLevel:  "info",
+		logrus.WarnLevel:  "warning",
+		logrus.ErrorLevel: "error",
+		logrus.FatalLevel: "fatal",
+		logrus.PanicLevel: "panic",
+	}
+
+	color := map[logrus.Level]string{
+		logrus.DebugLevel: COLORCYAN,
+		logrus.InfoLevel:  COLORWHITE,
+		logrus.WarnLevel:  COLORYELLOW,
+		logrus.ErrorLevel: COLORBLUE,
+		logrus.FatalLevel: COLORMAGENTA,
+		logrus.PanicLevel: COLORRED,
+	}
+
+	if text[level] != "" {
+		lvlText = text[level]
+	}
+
+	if color[level] != "" {
+		lvlColor = color[level]
+	}
+
+	return
 }
 
 func SetLogFormatter(app *cli.App) {
