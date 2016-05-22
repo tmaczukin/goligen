@@ -36,6 +36,9 @@ func main() {
 	}
 
 	app := cli.NewApp()
+	helpers.AddLogLevelFlags(app)
+	helpers.SetLogFormatter(app)
+
 	app.Name = NAME
 	app.Usage = "Simple license file generator"
 	app.Version = version.ShortInfo()
@@ -50,8 +53,6 @@ func main() {
 	app.CommandNotFound = func(context *cli.Context, command string) {
 		logrus.Fatalln("Command not found:", command)
 	}
-
-	helpers.AddLogLevelFlags(app)
 
 	err = app.Run(os.Args)
 	if err != nil {
