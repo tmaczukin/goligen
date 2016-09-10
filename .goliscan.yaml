@@ -1,0 +1,8 @@
+---
+blacklist:
+- GPL-2.0
+- GPL-3.0
+
+whitelist:
+- MIT
+- NewBSD

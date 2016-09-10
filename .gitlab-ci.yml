@@ -9,22 +9,25 @@ before_script:
 - GODIR=$GOPATH/src/gitlab.com/tmaczukin/goligen
 - mkdir -p "$(dirname $GODIR)"
 - ln -sfv "$(pwd -P)" "$GODIR"
-- cd /tmp
-- wget -q https://github.com/Masterminds/glide/releases/download/0.10.2/glide-0.10.2-linux-amd64.tar.gz -O glide.tar.gz
-- tar -xzf glide.tar.gz
-- mv linux-amd64/glide /usr/local/bin/glide
 - cd "$GODIR"
 
-tests:
+.docker: &docker
   stage: test
-  script:
-  - make test
   tags:
   - docker
 
+licenses_check:
+  <<: *docker
+  script:
+  - make license
+
+statis_analysis:
+  <<: *docker
+  script:
+  - make lint fmt vet complexity
+
 build:
+  <<: *docker
   stage: build
   script:
   - make build_all
-  tags:
-  - docker

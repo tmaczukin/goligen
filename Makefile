@@ -16,25 +16,31 @@ deps:
 	go get -u github.com/golang/lint/golint
 	go get github.com/fzipp/gocyclo
 	go install cmd/vet
+	go get gitlab.com/tmaczukin/goliscan
+	go install github.com/Masterminds/glide/
 	glide install
 
-test: deps lint fmt vet complexity
+test: deps license lint fmt vet complexity
 
-lint:
+license: deps
+	# Running licenses check
+	golicense check
+
+lint: deps
 	# Running LINT test
 	@for package in $$(go list ./... | grep -v /vendor/); do \
 		golint $$package | (! grep -v "should have comment or be unexported"); \
 	done
 
-fmt:
+fmt: deps
 	# Check code formatting style
 	@go fmt $$(go list ./... | grep -v -e /vendor/ -e license/bindata\.go) | awk '{ print "Please run go fmt ("$$0")"; exit 1 }'
 
-vet:
+vet: dpes
 	# Checking for suspicious constructs
 	@go vet $$(go list ./... | grep -v /vendor/)
 
-complexity:
+complexity: deps
 	# Check code complexity
 	@gocyclo -over 5 $(shell find . -name "*.go" ! -name "bindata.go" ! -path "./vendor/*")
 
