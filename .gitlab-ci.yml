@@ -17,7 +17,6 @@ cache:
   stage: test
   before_script:
   - source ci/prepare.sh
-  - make deps
   tags:
   - docker
 
@@ -34,23 +33,23 @@ bindata:
 licenses_check:
   <<: *docker
   script:
-  - make license
+  - make deps deps-tests license
 
 unit_tests:
   <<: *docker
   script:
-  - make test
+  - make deps deps-tests test
 
 static_analysis:
   <<: *docker
   script:
-  - make lint fmt vet complexity
+  - make deps deps-tests lint fmt vet complexity
 
 build:
   <<: *docker
   stage: build
   script:
-  - make build build_all prepare_sha
+  - make deps deps-build build build_all prepare_sha
   artifacts:
     expire_in: 7d
     paths:
