@@ -7,6 +7,12 @@ stages:
 - build
 - release
 
+cache:
+  key: global_cache
+  paths:
+  - ./glide/
+  - vendor/
+
 .docker: &docker
   stage: test
   before_script:
