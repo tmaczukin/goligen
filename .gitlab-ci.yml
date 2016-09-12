@@ -20,9 +20,9 @@ bindata:
   script:
   - make bindata
   artifacts:
-  expire_in: 7d
-  paths:
-  - license/bindata.go
+    expire_in: 7d
+    paths:
+    - license/bindata.go
 
 licenses_check:
   <<: *docker
