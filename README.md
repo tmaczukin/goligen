@@ -51,7 +51,7 @@ Examples:
     ```
 
 1. If you want to install the `v0.1.0` version, you can find the download pave
-   at: https://articats.maczukin.pl/goligen/v0.1.0/index.html.
+   at: https://artifacts.maczukin.pl/goligen/v0.1.0/index.html.
 
     To install the binary for Linux OS and amd64 platform:
 

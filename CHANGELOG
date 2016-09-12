@@ -1,3 +1,7 @@
+v0.1.2
+
+- Fix download URL in README.md
+
 v0.1.1
 
 - Fix timezone information in built time compilation parameter
