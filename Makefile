@@ -15,6 +15,10 @@ GO_FILES := $(shell find * -name "*.go")
 export GO15VENDOREXPERIMENT := 1
 export CGO_ENABLED := 0
 
+export GIT_TREE_URL := https://gitlab.com/tmaczukin/goligen/tree
+export S3_BUCKET := $(NAME)
+export PROJECT_NAME := GoLiGen
+
 version:
 	@echo "Current version: $(VERSION)"
 	@echo "Current revision: $(REVISION)"
@@ -80,6 +84,15 @@ build_all: license/bindata.go
 	@gox $(BUILD_PLATFORMS)      \
 		-ldflags "$(GO_LDFLAGS)" \
 		-output="out/binaries/$(NAME)-{{.OS}}-{{.Arch}}"
+
+prepare_sha:
+	# Prepare SHA-256 checksum file
+	@sha256sum $$(find out/* -type f ! -name "index.html") > out/release.sha256
+
+RELEASE := development
+release:
+	# Doing release for "$(RELEASE)"
+	@ci/release.sh $(RELEASE)
 
 clean:
 	@rm -f out/binaries/*
