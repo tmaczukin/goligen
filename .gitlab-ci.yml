@@ -34,7 +34,7 @@ unit_tests:
   script:
   - make test
 
-statis_analysis:
+static_analysis:
   <<: *docker
   script:
   - make lint fmt vet complexity
