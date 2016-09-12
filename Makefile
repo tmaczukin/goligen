@@ -28,14 +28,19 @@ version:
 
 deps:
 	# Install dependencies
+	go get github.com/Masterminds/glide/
+	glide install
+
+deps-build:
+	# Install build dependencies
 	go get github.com/mitchellh/gox
-	go get github.com/jteeuwen/go-bindata/...
+
+deps-tests:
+	# Install tests dependencies
 	go get github.com/golang/lint/golint
 	go get github.com/fzipp/gocyclo
 	go install cmd/vet
 	go get gitlab.com/tmaczukin/goliscan
-	go get github.com/Masterminds/glide/
-	glide install
 
 license: $(GO_FILES)
 	# Running licenses check
@@ -66,6 +71,7 @@ test: license/bindata.go
 
 license/bindata.go:
 	# Bundle binaries
+	go get github.com/jteeuwen/go-bindata/...
 	@go-bindata               \
 		-pkg license          \
 		-o license/bindata.go \
