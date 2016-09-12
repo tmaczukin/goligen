@@ -43,7 +43,7 @@ lint:
 
 fmt:
 	# Check code formatting style
-	@go fmt $$(go list $$(glide novendor) | grep -v -e license/bindata\.go) | awk '{if (NF > 0) {if (NR == 1) print "Please run go fmt for:"; print "- "$$1}} END {if (NF > 0) {if (NR > 0) exit 1}}'
+	@go fmt $$(glide novendor) | awk '{if (NF > 0) {if (NR == 1) print "Please run go fmt for:"; print "- "$$1}} END {if (NF > 0) {if (NR > 0) exit 1}}'
 
 vet:
 	# Checking for suspicious constructs
@@ -66,6 +66,7 @@ license/bindata.go:
 		-pkg license          \
 		-o license/bindata.go \
 		templates/
+	@go fmt license/bindata.go
 bindata: license/bindata.go
 
 build: license/bindata.go
