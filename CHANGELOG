@@ -1,4 +1,4 @@
-v0.1.0 (unreleased)
+v0.1.0
 
 - Main documentation
 - User default configuration (default license ID and defaults copyrights)
@@ -6,3 +6,4 @@ v0.1.0 (unreleased)
 - Internal MIT template
 - Internal GPL-2.0 template
 - Basic implementation (templates listing and license file generation)
+- Release CI build
