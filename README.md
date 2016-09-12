@@ -11,6 +11,8 @@ Simple license file generator written in GO
 ## Table of Contents
 
 - [Installation](#installation)
+  - [Download a compiled binary](#download-a-compiled-binary)
+  - [Install from source](#install-from-source)
 - [Usage](#usage)
   - [List available license templates](#list-available-license-templates)
   - [Generate the license](#generate-the-license)
@@ -22,17 +24,54 @@ Simple license file generator written in GO
 
 ## Installation
 
-Currently there is no source of compiled binaries. You can install the tool from source
-with:
+### Download a compiled binary
+
+You can download the current stable version of the project from
+`https://artifacts.maczukin.pl/goligen/${RELEASE}/index.html`, where
+`${RELEASE}` is one of:
+
+| Release | Description |
+|---------|-------------|
+| `release_stable` | The current _stable_ version of the project |
+| `release_unstable` | The current _unstable_ version of the project |
+| `vX.Y.Z` | The `vX.Y.Z` version of the project, eg. `v0.1.0` |
+| `branch/name` | Version from the `branch/name` branch in git tree |
+
+Examples:
+
+1. If you want to install the latest _stable_ version - whichever it will
+   be at the moment - you can find the download page at:
+   https://artifacts.maczukin.pl/goligen/release_stable/index.html.
+
+    To install the binary for Linux OS and amd64 platform:
+
+    ```bash
+    $ sudo wget -O /usr/local/bin/goligen https://artifacts.maczukin.pl/goligen/release_stable/binaries/goligen-linux-amd64
+    $ sudo chmod +x /usr/local/bin/goligen
+    ```
+
+1. If you want to install the `v0.1.0` version, you can find the download pave
+   at: https://articats.maczukin.pl/goligen/v0.1.0/index.html.
+
+    To install the binary for Linux OS and amd64 platform:
+
+    ```bash
+    $ sudo wget -O /usr/local/bin/goligen https://artifacts.maczukin.pl/goligen/v0.1.0/binaries/goligen-linux-amd64
+    $ sudo chmod +x /usr/local/bin/goligen
+    ```
+
+### Install from source
+
+> **Notice:**
+> You need to have a configured GO environment for this
+
+To install GoLiGen from sourcec simply execute command:
 
 ```bash
 $ go install gitlab.com/tmaczukin/goligen
 ```
 
-To do this you should have a configured GO environment.
-
-Soon there should be ready a repository of compiled binaries for multiple platforms, so the installation will be much
-simpler and it will not require a GO development environment.
+This will download current sources and install the binary in your `$GOPATH/bin`.
 
 ## Usage
 

@@ -49,7 +49,7 @@ build:
   <<: *docker
   stage: build
   script:
-  - make deps deps-build build build_all prepare_sha
+  - make deps deps-build build_all prepare_sha
   artifacts:
     expire_in: 7d
     paths:
