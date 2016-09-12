@@ -21,21 +21,22 @@ __check_variable() {
     fi
 }
 
+__check_variables() {
+    EXIT=0
+    __check_variable PROJECT_NAME || EXIT=1
+    __check_variable S3_ALIAS || EXIT=1
+    __check_variable S3_BUCKET || EXIT=1
+    __check_variable S3_HOST || EXIT=1
+    __check_variable S3_ACCESS_KEY || EXIT=1
+    __check_variable S3_SECRET_KEY || EXIT=1
+    __check_variable S3_API || EXIT=1
 
-EXIT=0
-__check_variable PROJECT_NAME || EXIT=1
-__check_variable S3_ALIAS || EXIT=1
-__check_variable S3_BUCKET || EXIT=1
-__check_variable S3_HOST || EXIT=1
-__check_variable S3_ACCESS_KEY || EXIT=1
-__check_variable S3_SECRET_KEY || EXIT=1
-__check_variable S3_API || EXIT=1
 
-
-if [[ "${EXIT}" -gt 0 ]]; then
-    echo $EXIT
-    exit 1
-fi
+    if [[ "${EXIT}" -gt 0 ]]; then
+        echo $EXIT
+        exit 1
+    fi
+}
 
 __usage_info() {
     echo "Usage ${0} (development|unstable|stable)"
@@ -96,15 +97,16 @@ __upload_release() {
     UPLOAD_PATH="${S3_BUCKET}/${1}"
 
     mc cp -q -r out/ ${S3_ALIAS}/${UPLOAD_PATH}
-    echo -e "\033[1mDownload URL: \033[36;1m${S3_HOST}/${UPLOAD_PATH}/index.html\033[0m"
+    echo -e "\033[37mDownload URL: \033[36m${S3_HOST}/${UPLOAD_PATH}/index.html\033[0m"
 }
+
+
 
 if [[ "$#" -lt 1 ]]; then
     __usage_info
 fi
 
 RELEASE="${1}"
-
 case "${RELEASE}" in
     development)
         ;;
@@ -116,7 +118,9 @@ case "${RELEASE}" in
         __usage_info
 esac
 
+__check_variables
 __prepare_index
 __configure_s3_client
-__upload_release release_${RELEASE}
 __upload_release ${CI_BUILD_REF_NAME}
+__upload_release release_${RELEASE}
+
