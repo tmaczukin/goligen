@@ -56,7 +56,7 @@ complexity:
 	# Check code complexity
 	@gocyclo -over 6 $(COMPLEXITY_FILES)
 
-test:
+test: license/bindata.go
 	# Run unittests
 	@go test -cover -covermode count $$(glide novendor)
 
@@ -66,6 +66,7 @@ license/bindata.go:
 		-pkg license          \
 		-o license/bindata.go \
 		templates/
+bindata: license/bindata.go
 
 build: license/bindata.go
 	# Building $(NAME) in version $(VERSION) for current platform

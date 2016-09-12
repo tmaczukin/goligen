@@ -2,6 +2,7 @@
 image: golang:1.6
 
 stages:
+- prebuild
 - test
 - build
 
@@ -12,6 +13,16 @@ stages:
   - make deps
   tags:
   - docker
+
+bindata:
+  <<: *docker
+  stage: prebuild
+  script:
+  - make bindata
+  artifacts:
+  expire_in: 7d
+  paths:
+  - license/bindata.go
 
 licenses_check:
   <<: *docker
