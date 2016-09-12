@@ -2,7 +2,7 @@ NAME ?= goligen
 REVISION := $(shell git rev-parse --short HEAD || echo unknown)
 VERSION := $(shell (git describe || echo dev) | sed -e 's/^v//g')
 BRANCH := $(shell git show-ref | grep "$(REVISION)" | grep -v HEAD | awk '{print $$2}' | sed 's|refs/remotes/origin/||' | sed 's|refs/heads/||' | sort | head -n 1)
-BUILT := $(shell date +%Y-%m-%dT%H:%M:%S%:z)
+BUILT := $(shell date +%Y-%m-%dT%H:%M:%S%z)
 
 BUILD_PLATFORMS ?= -os=linux -os=darwin -os=windows -arch=amd64 -arch=386
 

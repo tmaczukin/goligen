@@ -1,3 +1,7 @@
+v0.1.1
+
+- Fix timezone information in built time compilation parameter
+
 v0.1.0
 
 - Main documentation
