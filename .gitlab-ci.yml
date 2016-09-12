@@ -5,6 +5,13 @@ stages:
 - prebuild
 - test
 - build
+- release
+
+cache:
+  key: global_cache
+  paths:
+  - ./glide/
+  - vendor/
 
 .docker: &docker
   stage: test
@@ -43,4 +50,36 @@ build:
   <<: *docker
   stage: build
   script:
-  - make build build_all
+  - make build build_all prepare_sha
+  artifacts:
+    expire_in: 7d
+    paths:
+    - out/
+
+.release: &release
+  <<: *docker
+  stage: release
+  script:
+  - make release RELEASE="$CI_BUILD_NAME"
+  tags:
+  - release
+
+development:
+  <<: *release
+  only:
+  - branches@tmaczukin/goligen
+  except:
+  - master@tmaczukin/goligen
+  environment: development
+
+unstable:
+  <<: *release
+  only:
+  - master@tmaczukin/goligen
+  environment: unstable
+
+stable:
+  <<: *release
+  only:
+  - tags@tmaczukin/goligen
+  environment: stable

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 GODIR=$GOPATH/src/gitlab.com/tmaczukin/goligen
 mkdir -p "$(dirname $GODIR)"
