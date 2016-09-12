@@ -12,11 +12,6 @@ import (
 	"gitlab.com/tmaczukin/goligen/helpers"
 )
 
-var NAME = path.Base(os.Args[0])
-var VERSION = "dev"
-var REVISION = "HEAD"
-var BUILT = "now"
-
 func main() {
 	defer func() {
 		r := recover()
@@ -30,16 +25,13 @@ func main() {
 	}()
 
 	version := common.GetVersion()
-	err := version.SetValues(VERSION, REVISION, BUILT)
-	if err != nil {
-		logrus.Fatal(err)
-	}
+	cli.VersionPrinter = version.Printer
 
 	app := cli.NewApp()
 	helpers.AddLogLevelFlags(app)
 	helpers.SetLogFormatter(app)
 
-	app.Name = NAME
+	app.Name = path.Base(os.Args[0])
 	app.Usage = "Simple license file generator"
 	app.Version = version.ShortInfo()
 	app.Authors = []cli.Author{
@@ -54,7 +46,7 @@ func main() {
 		logrus.Fatalln("Command not found:", command)
 	}
 
-	err = app.Run(os.Args)
+	err := app.Run(os.Args)
 	if err != nil {
 		logrus.Fatal(err)
 	}

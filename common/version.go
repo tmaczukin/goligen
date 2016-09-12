@@ -6,34 +6,52 @@ import (
 	"runtime"
 	"text/template"
 	"time"
+
+	"github.com/codegangsta/cli"
 )
+
+var VERSION = "dev"
+var REVISION = "HEAD"
+var BRANCH = "master"
+var BUILT = "now"
 
 var extendedInfoTemplate = `Version:      {{.Version}}
 Git revision: {{.Revision}}
+Git branch:   {{.Branch}}
 GO version:   {{.GoVersion}}
-Built:        {{.Built}}
-OS/Arch:      {{.Os}}/{{.Arch}}`
+OS/Arch:      {{.Os}}/{{.Arch}}
+Built:        {{.Built}}`
 
 type Version struct {
 	Version   string
 	Revision  string
-	Built     time.Time
+	Branch    string
 	GoVersion string
 	Os        string
 	Arch      string
+	Built     string
 }
 
-func (v *Version) SetValues(version, revision, built string) (err error) {
-	v.Version = version
-	v.Revision = revision
+func (v *Version) prepare() (err error) {
+	var built time.Time
 
-	if built == "now" {
-		v.Built = time.Now()
+	if v.Built == "now" {
+		built = time.Now()
 	} else {
-		v.Built, err = time.Parse(time.RFC3339, built)
+		built, err = time.Parse(time.RFC3339, v.Built)
+		if err != nil {
+			return
+		}
 	}
 
-	return err
+	v.Built = built.Format(time.RFC3339)
+
+	return
+}
+
+func (v *Version) Printer(c *cli.Context) {
+	info, _ := v.ExtendedInfo()
+	fmt.Println(info)
 }
 
 func (v *Version) ShortInfo() string {
@@ -60,10 +78,15 @@ var instance *Version
 func GetVersion() *Version {
 	if instance == nil {
 		instance = &Version{
+			Version:   VERSION,
+			Revision:  REVISION,
+			Branch:    BRANCH,
 			GoVersion: runtime.Version(),
 			Os:        runtime.GOOS,
 			Arch:      runtime.GOARCH,
+			Built:     BUILT,
 		}
+		instance.prepare()
 	}
 
 	return instance

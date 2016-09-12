@@ -5,14 +5,11 @@ stages:
 - test
 - build
 
-before_script:
-- GODIR=$GOPATH/src/gitlab.com/tmaczukin/goligen
-- mkdir -p "$(dirname $GODIR)"
-- ln -sfv "$(pwd -P)" "$GODIR"
-- cd "$GODIR"
-
 .docker: &docker
   stage: test
+  before_script:
+  - source ci/prepare.sh
+  - make deps
   tags:
   - docker
 
@@ -20,6 +17,11 @@ licenses_check:
   <<: *docker
   script:
   - make license
+
+unit_tests:
+  <<: *docker
+  script:
+  - make test
 
 statis_analysis:
   <<: *docker
@@ -30,4 +32,4 @@ build:
   <<: *docker
   stage: build
   script:
-  - make build_all
+  - make build build_all
